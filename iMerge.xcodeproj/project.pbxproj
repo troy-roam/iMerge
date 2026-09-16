@@ -1,0 +1,248 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		541002C4A91A47A6B918C983BF /* iMergeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541002C4A91A47A6B918C983FR /* iMergeApp.swift */; };
+		1266ED972E61464FA478A56BBF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1266ED972E61464FA478A56BFR /* ContentView.swift */; };
+		6AF4E74B88664F22B5022D3DBF /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF4E74B88664F22B5022D3DFR /* ImageItem.swift */; };
+		0F3E61CC4F664F039F2395EBBF /* ImageMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3E61CC4F664F039F2395EBFR /* ImageMerger.swift */; };
+		B130CBD1D00F42CA9D483AF7BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B130CBD1D00F42CA9D483AF7FR /* Assets.xcassets */; };
+		9C1A77E4B2054D71A0F31E02 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A77E4B2054D71A0F31E01 /* Annotation.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6B5FAB1EEDCD47219254C7B2 /* iMerge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMerge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		541002C4A91A47A6B918C983FR /* iMergeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iMergeApp.swift; sourceTree = "<group>"; };
+		1266ED972E61464FA478A56BFR /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		6AF4E74B88664F22B5022D3DFR /* ImageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageItem.swift; sourceTree = "<group>"; };
+		0F3E61CC4F664F039F2395EBFR /* ImageMerger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMerger.swift; sourceTree = "<group>"; };
+		B130CBD1D00F42CA9D483AF7FR /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		516C057F29AF42C7AAC499BFFR /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C1A77E4B2054D71A0F31E01 /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		69F869F000AA4CCBA879B699 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18EFC98EF96645A78C59C8BFGRP /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				18EFC98EF96645A78C59C8BFSRC /* iMerge */,
+				18EFC98EF96645A78C59C8BFPRD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		18EFC98EF96645A78C59C8BFSRC /* iMerge */ = {
+			isa = PBXGroup;
+			children = (
+				541002C4A91A47A6B918C983FR /* iMergeApp.swift */,
+				1266ED972E61464FA478A56BFR /* ContentView.swift */,
+				6AF4E74B88664F22B5022D3DFR /* ImageItem.swift */,
+				0F3E61CC4F664F039F2395EBFR /* ImageMerger.swift */,
+				9C1A77E4B2054D71A0F31E01 /* Annotation.swift */,
+				B130CBD1D00F42CA9D483AF7FR /* Assets.xcassets */,
+				516C057F29AF42C7AAC499BFFR /* Info.plist */,
+			);
+			path = iMerge;
+			sourceTree = "<group>";
+		};
+		18EFC98EF96645A78C59C8BFPRD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6B5FAB1EEDCD47219254C7B2 /* iMerge.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3AD7E681E6384BFB81E6D08D /* iMerge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3AD7E681E6384BFB81E6D08DBCL /* Build configuration list for PBXNativeTarget "iMerge" */;
+			buildPhases = (
+				B6474B4C41D3486087C538B6 /* Sources */,
+				69F869F000AA4CCBA879B699 /* Frameworks */,
+				2B594AFDB1454EEDADE92ED2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iMerge;
+			productName = iMerge;
+			productReference = 6B5FAB1EEDCD47219254C7B2 /* iMerge.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		18EFC98EF96645A78C59C8BF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 18EFC98EF96645A78C59C8BFBCL /* Build configuration list for PBXProject "iMerge" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 18EFC98EF96645A78C59C8BFGRP /* Root */;
+			productRefGroup = 18EFC98EF96645A78C59C8BFPRD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3AD7E681E6384BFB81E6D08D /* iMerge */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2B594AFDB1454EEDADE92ED2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B130CBD1D00F42CA9D483AF7BF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B6474B4C41D3486087C538B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				541002C4A91A47A6B918C983BF /* iMergeApp.swift in Sources */,
+				1266ED972E61464FA478A56BBF /* ContentView.swift in Sources */,
+				6AF4E74B88664F22B5022D3DBF /* ImageItem.swift in Sources */,
+				0F3E61CC4F664F039F2395EBBF /* ImageMerger.swift in Sources */,
+				9C1A77E4B2054D71A0F31E02 /* Annotation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		82480A74E5D043998323E644 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DYNAMIC_NO_PIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		02ED1155E14B4515B6169C28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		FA0627C9D9514ADCA01BE4F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iMerge/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.iMerge;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		429DFD069F5644ABA92DBC23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iMerge/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.iMerge;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		18EFC98EF96645A78C59C8BFBCL /* Build configuration list for PBXProject "iMerge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				82480A74E5D043998323E644 /* Debug */,
+				02ED1155E14B4515B6169C28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3AD7E681E6384BFB81E6D08DBCL /* Build configuration list for PBXNativeTarget "iMerge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA0627C9D9514ADCA01BE4F8 /* Debug */,
+				429DFD069F5644ABA92DBC23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 18EFC98EF96645A78C59C8BF /* Project object */;
+}
