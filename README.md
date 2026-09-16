@@ -2,7 +2,7 @@
 
 A simple Mac app for merging screenshots: paste images onto a canvas, drag them into place, sketch arrows or a cursor on top, then copy or export exactly what you see.
 
-<img src="docs/screenshot.png" alt="iMerge canvas with two screenshots merged side by side" width="880">
+<img src="docs/screenshot.png" alt="iMerge window showing an empty canvas ready for pasted images" width="880">
 
 ## Install (one command)
 
