@@ -2,13 +2,13 @@
 # Install iMerge into ~/Applications and open it.
 #
 # One command:
-#   curl -fsSL https://raw.githubusercontent.com/OWNER/iMerge/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/troy-roam/iMerge/main/install.sh | bash
 #
 # From a clone:
 #   ./install.sh
 set -euo pipefail
 
-REPO_URL="${IMERGE_REPO:-https://github.com/OWNER/iMerge.git}"
+REPO_URL="${IMERGE_REPO:-https://github.com/troy-roam/iMerge.git}"
 APP_DIR="${IMERGE_APP_DIR:-$HOME/Applications}"
 CLONE_DIR="${IMERGE_SRC:-$HOME/.cache/imerge/src}"
 

@@ -9,7 +9,7 @@ A simple Mac app for merging screenshots: paste images onto a canvas, drag them 
 macOS 14+ with [Xcode](https://developer.apple.com/xcode/) (or the Xcode command line tools):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/OWNER/iMerge/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/troy-roam/iMerge/main/install.sh | bash
 ```
 
 That clones the repo, builds iMerge, puts `iMerge.app` in `~/Applications`, and opens it.
