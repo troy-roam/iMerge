@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 
 enum AnnotationTool: String, CaseIterable, Identifiable {
-    case select, arrow, pointer, pen
+    case select, arrow, pointer, pen, text
 
     var id: String { rawValue }
     var isDrawing: Bool { self != .select }
@@ -13,6 +13,7 @@ enum AnnotationTool: String, CaseIterable, Identifiable {
         case .arrow: "Arrow"
         case .pointer: "Cursor"
         case .pen: "Sketch"
+        case .text: "Text"
         }
     }
 
@@ -22,6 +23,7 @@ enum AnnotationTool: String, CaseIterable, Identifiable {
         case .arrow: "arrow.up.right"
         case .pointer: "cursorarrow.click"
         case .pen: "scribble"
+        case .text: "textformat"
         }
     }
 }
@@ -41,6 +43,7 @@ enum AnnotationKind {
     case arrow(start: CGPoint, end: CGPoint)
     case pointer(tip: CGPoint)
     case pen(points: [CGPoint])
+    case text(origin: CGPoint, value: String, fontSize: CGFloat)
 }
 
 enum ArrowEndpoint {
@@ -85,7 +88,27 @@ extension Annotation {
             return pointerOps(tip: tip)
         case let .pen(points):
             return [DrawOp(path: penPath(points: points), color: color, isFill: false, lineWidth: lineWidth)]
+        case .text:
+            return []
         }
+    }
+
+    var textInfo: (origin: CGPoint, value: String, fontSize: CGFloat)? {
+        guard case let .text(origin, value, fontSize) = kind else { return nil }
+        return (origin, value, fontSize)
+    }
+
+    func textAttributes(scale: CGFloat = 1) -> [NSAttributedString.Key: Any] {
+        [
+            .font: NSFont.systemFont(ofSize: (textInfo?.fontSize ?? 24) * scale, weight: .semibold),
+            .foregroundColor: color
+        ]
+    }
+
+    private var textBounds: CGRect? {
+        guard let info = textInfo else { return nil }
+        let size = (info.value as NSString).size(withAttributes: textAttributes())
+        return CGRect(origin: info.origin, size: CGSize(width: ceil(size.width), height: ceil(size.height)))
     }
 
     private func arrowOps(start: CGPoint, end: CGPoint) -> [DrawOp] {
@@ -175,6 +198,9 @@ extension Annotation {
 
     /// Padded so strokes and the pointer halo are never clipped from the export.
     var bounds: CGRect {
+        if let textBounds {
+            return textBounds.insetBy(dx: -4, dy: -3)
+        }
         var result: CGRect?
         for op in drawOps {
             let box = op.isFill
@@ -187,6 +213,9 @@ extension Annotation {
 
     /// Combined geometry used for click targets, so clicks off the ink pass through.
     var hitPath: CGPath {
+        if let textBounds {
+            return CGPath(rect: textBounds, transform: nil)
+        }
         let combined = CGMutablePath()
         for op in drawOps where !op.isHalo {
             combined.addPath(op.path)
@@ -207,6 +236,8 @@ extension Annotation {
             copy.kind = .pointer(tip: move(tip))
         case let .pen(points):
             copy.kind = .pen(points: points.map(move))
+        case let .text(origin, value, fontSize):
+            copy.kind = .text(origin: move(origin), value: value, fontSize: fontSize)
         }
         return copy
     }
@@ -234,7 +265,27 @@ extension Annotation {
             copy.kind = .pointer(tip: transform(tip))
         case let .pen(points):
             copy.kind = .pen(points: points.map(transform))
+        case let .text(origin, value, fontSize):
+            copy.kind = .text(
+                origin: transform(origin),
+                value: value,
+                fontSize: fontSize * widthScale
+            )
         }
+        return copy
+    }
+
+    func replacingText(_ value: String) -> Annotation {
+        guard case let .text(origin, _, fontSize) = kind else { return self }
+        var copy = self
+        copy.kind = .text(origin: origin, value: value, fontSize: fontSize)
+        return copy
+    }
+
+    func replacingFontSize(_ fontSize: CGFloat) -> Annotation {
+        guard case let .text(origin, value, _) = kind else { return self }
+        var copy = self
+        copy.kind = .text(origin: origin, value: value, fontSize: fontSize)
         return copy
     }
 

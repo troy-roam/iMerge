@@ -88,6 +88,20 @@ enum ImageMerger {
         cg.setLineJoin(.round)
 
         for annotation in annotations.sorted(by: { $0.z < $1.z }) {
+            if let text = annotation.textInfo {
+                let attributes = annotation.textAttributes(scale: scale)
+                let attributed = NSAttributedString(string: text.value, attributes: attributes)
+                let size = attributed.size()
+                let rect = NSRect(
+                    x: (text.origin.x - bounds.minX) * scale,
+                    y: (bounds.maxY - text.origin.y) * scale - size.height,
+                    width: ceil(size.width),
+                    height: ceil(size.height)
+                )
+                attributed.draw(in: rect)
+                continue
+            }
+
             for op in annotation.drawOps {
                 guard let path = op.path.copy(using: &transform) else { continue }
                 let color = (op.color.usingColorSpace(.sRGB) ?? op.color).cgColor

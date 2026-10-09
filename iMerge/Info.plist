@@ -6,6 +6,8 @@
 	<string>iMerge</string>
 	<key>CFBundleDisplayName</key>
 	<string>iMerge</string>
+	<key>LSMultipleInstancesProhibited</key>
+	<true/>
 	<key>LSMinimumSystemVersion</key>
 	<string>14.0</string>
 	<key>NSHighResolutionCapable</key>

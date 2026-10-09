@@ -32,6 +32,7 @@ struct ContentView: View {
     @State private var tool: AnnotationTool = .select
     @State private var inkColor: Color = .red
     @State private var inkWidth: Double = 4
+    @State private var textSize: Double = 24
 
     private var exportBounds: CGRect { ImageMerger.bounds(of: items, annotations: annotations) }
 
@@ -55,6 +56,7 @@ struct ContentView: View {
         }
         .onChange(of: inkColor) { _, _ in applyInkToSelection() }
         .onChange(of: inkWidth) { _, _ in applyInkToSelection() }
+        .onChange(of: textSize) { _, _ in applyTextSizeToSelection() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didResignActiveNotification)) { _ in
             if isSpaceHeld { isSpaceHeld = false }
         }
@@ -155,6 +157,7 @@ struct ContentView: View {
                     onMoveEndpoint: { endpoint, translation in
                         moveArrowEndpoint(id: annotation.id, endpoint: endpoint, translation: translation)
                     },
+                    onEditText: { editText(id: annotation.id) },
                     onGestureEnd: endGesture,
                     onDelete: { removeAnnotation(id: annotation.id) }
                 )
@@ -171,6 +174,7 @@ struct ContentView: View {
                     onSelect: {},
                     onMove: { _ in },
                     onMoveEndpoint: { _, _ in },
+                    onEditText: {},
                     onGestureEnd: {},
                     onDelete: {}
                 )
@@ -320,6 +324,12 @@ struct ContentView: View {
         tool.isDrawing || annotations.contains { selection.contains($0.id) }
     }
 
+    private var isEditingText: Bool {
+        tool == .text || annotations.contains {
+            selection.contains($0.id) && $0.textInfo != nil
+        }
+    }
+
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         // Mode and its attributes sit centered; the title stays at the far left.
@@ -342,17 +352,32 @@ struct ContentView: View {
                     .controlSize(.small)
                     .help("Annotation color")
 
-                Menu {
-                    Picker("Thickness", selection: $inkWidth) {
-                        Text("Thin").tag(2.0)
-                        Text("Medium").tag(4.0)
-                        Text("Thick").tag(7.0)
+                if isEditingText {
+                    Menu {
+                        Picker("Text Size", selection: $textSize) {
+                            Text("Small").tag(16.0)
+                            Text("Medium").tag(24.0)
+                            Text("Large").tag(36.0)
+                            Text("Extra Large").tag(52.0)
+                        }
+                        .pickerStyle(.inline)
+                    } label: {
+                        Label("Text Size", systemImage: "textformat.size")
                     }
-                    .pickerStyle(.inline)
-                } label: {
-                    Label("Thickness", systemImage: "lineweight")
+                    .help("Text size")
+                } else {
+                    Menu {
+                        Picker("Thickness", selection: $inkWidth) {
+                            Text("Thin").tag(2.0)
+                            Text("Medium").tag(4.0)
+                            Text("Thick").tag(7.0)
+                        }
+                        .pickerStyle(.inline)
+                    } label: {
+                        Label("Thickness", systemImage: "lineweight")
+                    }
+                    .help("Annotation thickness")
                 }
-                .help("Annotation thickness")
             }
         }
 
@@ -436,9 +461,17 @@ struct ContentView: View {
                     } else {
                         draft = makeDraft(.pen(points: [start]))
                     }
+                case .text:
+                    break
                 }
             }
-            .onEnded { _ in commitDraft() }
+            .onEnded { value in
+                if tool == .text {
+                    addText(at: canvasPoint(value.location))
+                } else {
+                    commitDraft()
+                }
+            }
     }
 
     private func makeDraft(_ kind: AnnotationKind) -> Annotation {
@@ -479,11 +512,63 @@ struct ContentView: View {
         selection.remove(id)
     }
 
+    private func addText(at origin: CGPoint) {
+        guard let value = requestText(title: "Add Text", initialValue: ""),
+              !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+
+        let annotation = Annotation(
+            kind: .text(origin: origin, value: value, fontSize: textSize),
+            color: NSColor(inkColor),
+            lineWidth: inkWidth,
+            z: (annotations.map(\.z).max() ?? 0) + 1
+        )
+        annotations.append(annotation)
+        selection = [annotation.id]
+        tool = .select
+    }
+
+    private func editText(id: UUID) {
+        guard let index = annotations.firstIndex(where: { $0.id == id }),
+              let current = annotations[index].textInfo?.value,
+              let value = requestText(title: "Edit Text", initialValue: current),
+              !value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        annotations[index] = annotations[index].replacingText(value)
+        selection = [id]
+    }
+
+    /// Uses the standard AppKit alert and text field, matching native Mac dialogs.
+    private func requestText(title: String, initialValue: String) -> String? {
+        let alert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = "Enter the label to place on the canvas."
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: title == "Add Text" ? "Add" : "Done")
+        alert.addButton(withTitle: "Cancel")
+
+        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 280, height: 24))
+        field.stringValue = initialValue
+        field.placeholderString = "Annotation"
+        alert.accessoryView = field
+        alert.window.initialFirstResponder = field
+
+        guard alert.runModal() == .alertFirstButtonReturn else { return nil }
+        return field.stringValue
+    }
+
     /// Keeps the toolbar controls acting on whatever is selected.
     private func applyInkToSelection() {
         for index in annotations.indices where selection.contains(annotations[index].id) {
             annotations[index].color = NSColor(inkColor)
-            annotations[index].lineWidth = inkWidth
+            if annotations[index].textInfo == nil {
+                annotations[index].lineWidth = inkWidth
+            }
+        }
+    }
+
+    private func applyTextSizeToSelection() {
+        for index in annotations.indices
+        where selection.contains(annotations[index].id) && annotations[index].textInfo != nil {
+            annotations[index] = annotations[index].replacingFontSize(textSize)
         }
     }
 
@@ -917,6 +1002,7 @@ private struct AnnotationView: View {
     let onSelect: () -> Void
     let onMove: (CGSize) -> Void
     let onMoveEndpoint: (ArrowEndpoint, CGSize) -> Void
+    let onEditText: () -> Void
     let onGestureEnd: () -> Void
     let onDelete: () -> Void
 
@@ -924,20 +1010,30 @@ private struct AnnotationView: View {
         let bounds = annotation.bounds
         let origin = CGPoint(x: -bounds.minX, y: -bounds.minY)
 
-        Canvas { context, _ in
-            for op in annotation.drawOps {
-                guard let path = translated(op.path, by: origin) else { continue }
-                let shape = Path(path)
-                let color = Color(nsColor: op.color)
-                if op.isFill {
-                    context.fill(shape, with: .color(color))
-                } else {
-                    context.stroke(
-                        shape,
-                        with: .color(color),
-                        style: StrokeStyle(lineWidth: op.lineWidth, lineCap: .round, lineJoin: .round)
-                    )
+        ZStack(alignment: .topLeading) {
+            Canvas { context, _ in
+                for op in annotation.drawOps {
+                    guard let path = translated(op.path, by: origin) else { continue }
+                    let shape = Path(path)
+                    let color = Color(nsColor: op.color)
+                    if op.isFill {
+                        context.fill(shape, with: .color(color))
+                    } else {
+                        context.stroke(
+                            shape,
+                            with: .color(color),
+                            style: StrokeStyle(lineWidth: op.lineWidth, lineCap: .round, lineJoin: .round)
+                        )
+                    }
                 }
+            }
+
+            if let text = annotation.textInfo {
+                Text(text.value)
+                    .font(.system(size: text.fontSize, weight: .semibold))
+                    .foregroundStyle(Color(nsColor: annotation.color))
+                    .fixedSize()
+                    .offset(x: text.origin.x + origin.x, y: text.origin.y + origin.y)
             }
         }
         .frame(width: bounds.width, height: bounds.height)
@@ -961,6 +1057,10 @@ private struct AnnotationView: View {
         )
         .transaction { $0.animation = nil }
         .contextMenu {
+            if annotation.textInfo != nil {
+                Button("Edit Text…", action: onEditText)
+                Divider()
+            }
             Button("Delete", role: .destructive, action: onDelete)
         }
         .allowsHitTesting(isInteractive)
