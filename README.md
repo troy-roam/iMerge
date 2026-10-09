@@ -25,7 +25,7 @@ Already have a clone?
 - **⌘V** or drop files to add images
 - Drag to move, drag a corner to resize (aspect ratio stays locked)
 - **Space** + drag to pan, **⌘A** to select all, **⌫** to delete
-- Sketch tools: arrow, cursor marker, freehand — then **Copy** or **Export**
+- Annotation tools: arrow, cursor marker, freehand, and text — then **Copy** or **Export**
 
 ## Requirements
 

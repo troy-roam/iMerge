@@ -1,7 +1,30 @@
+import AppKit
 import SwiftUI
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        let bundleID = Bundle.main.bundleIdentifier ?? "com.local.iMerge"
+        let current = NSRunningApplication.current
+        let earlierCopy = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
+            .filter { $0.processIdentifier != current.processIdentifier && $0.processIdentifier < current.processIdentifier }
+            .min { $0.processIdentifier < $1.processIdentifier }
+
+        guard let earlierCopy else { return }
+        earlierCopy.activate(options: [.activateAllWindows])
+        NSApp.terminate(nil)
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        guard flag else { return true }
+        sender.windows.first { $0.isVisible }?.makeKeyAndOrderFront(nil)
+        return false
+    }
+}
 
 @main
 struct iMergeApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -9,6 +32,8 @@ struct iMergeApp: App {
         .windowStyle(.automatic)
         .defaultSize(width: 1000, height: 700)
         .commands {
+            CommandGroup(replacing: .newItem) { }
+
             CommandGroup(replacing: .pasteboard) {
                 Button("Paste Images") {
                     NotificationCenter.default.post(name: .pasteImages, object: nil)
